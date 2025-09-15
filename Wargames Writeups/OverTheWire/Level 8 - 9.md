@@ -4,3 +4,5 @@ I first started by doing `cat data.txt | uniq` which gave a lot of results. Upon
 Input : a a a b b c
 Uniq: a b c
 However using uniq -u deletes the duplicates so inputing "a a a b b c" gives only "c". We now do `cat data.txt | sort | uniq -u` which gives the password
+
+Password: 4CKMh1JI91bUIZZPXDqGanal4xvAg0JM
