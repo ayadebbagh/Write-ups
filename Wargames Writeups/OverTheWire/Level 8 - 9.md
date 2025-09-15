@@ -1,1 +1,3 @@
 "The password for the next level is stored in the file **data.txt** and is the only line of text that occurs only once"
+
+I first started by doing `cat data.txt | uniq` which gave a lot of results. Upon further research, I realized that "uniq" only checks for consecutive duplicates and looks at each string's neighbours, not the entire file at once. To fix this, we can sort the file so all the same strings are consecutive `cat data.txt | sort | uniq`
