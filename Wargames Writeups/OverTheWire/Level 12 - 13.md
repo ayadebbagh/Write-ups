@@ -5,7 +5,7 @@ A hex dump is a textual display of binary data (from a file, memory, or storage 
 
 ![[Screenshot 2025-09-16 at 1.11.40 PM.png]]
 
-After making a directory in `/tmp` and copying `data.txt`, we can use `xxd -r data2.txt` to reverse the hexdump 
+After making a directory in `/tmp` and copying `data.txt`, we can use `xxd -r data2.txt data3.txt` to reverse the hexdump and have the compressed data in `data3.txt`. To get more information on the file, we can use `file data3.txt` which tells us that it is a gzip compressed data file. 
 
 
 Password: FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn
