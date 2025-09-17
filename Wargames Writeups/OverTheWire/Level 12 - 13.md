@@ -16,7 +16,7 @@ xxd -r hexdump.txt compressed.txt
 ```
 
 This reversed the hexdump into its binary form.
-![](Write-ups/Wargames%20Writeups/OverTheWire/Screenshot%202025-09-16%20at%208.56.43%20PM.png)
+![](./Write-ups/Wargames%20Writeups/OverTheWire/Screenshot%202025-09-16%20at%208.56.43%20PM.png)
 ---
 
 ### Step 2: Identifying the file type
