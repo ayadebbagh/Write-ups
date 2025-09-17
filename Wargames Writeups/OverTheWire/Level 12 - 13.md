@@ -7,7 +7,7 @@ The password for the next level is stored in **data.txt**, which is a hexdump of
 ### Step 1: Understanding the file
 
 A **hexdump** is a textual representation of binary data, displayed in hexadecimal (base-16). To recover the original file, the hexdump must be reversed back into binary.
-![[Screenshot 2025-09-16 at 1.11.40 PM.png]]
+
 
 After creating a working directory in `/tmp` and copying `data.txt` there, I used:
 
@@ -16,8 +16,8 @@ xxd -r hexdump.txt compressed.txt
 ```
 
 This reversed the hexdump into its binary form.
-
-
+![](💌Attachments/Screenshot%202025-09-16%20at%208.46.22%20PM.png)
+![](💌Attachments/Screenshot%202025-09-16%20at%208.46.22%20PM.png)
 ---
 
 ### Step 2: Identifying the file type
