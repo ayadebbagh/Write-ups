@@ -60,10 +60,8 @@ Each time I decompressed the file, the result turned out to be compressed again 
     
 
 This process of renaming, identifying, and decompressing repeated multiple times.
-
-![[💌Attachments/Screenshot 2025-09-16 at 7.58.57 PM.png]]
-![[💌Attachments/Screenshot 2025-09-16 at 8.00.33 PM.png]]
-![[💌Attachments/Screenshot 2025-09-16 at 8.02.24 PM.png]]
+![](Write-ups/Wargames%20Writeups/OverTheWire/Screenshot%202025-09-16%20at%208.57.57%20PM.png)
+![](Write-ups/Wargames%20Writeups/OverTheWire/Screenshot%202025-09-16%20at%208.59.07%20PM.png)
 
 
 ---
@@ -75,7 +73,7 @@ Eventually, I extracted down to a file named `data8.bin`. Running `file data8.bi
 ```
 FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn
 ```
-![[💌Attachments/Screenshot 2025-09-16 at 8.03.41 PM.png]]
+![](Write-ups/Wargames%20Writeups/OverTheWire/Screenshot%202025-09-16%20at%208.59.39%20PM.png)
 
 ---
 
