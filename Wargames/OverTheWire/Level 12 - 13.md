@@ -16,7 +16,7 @@ xxd -r hexdump.txt compressed.txt
 ```
 
 This reversed the hexdump into its binary form.
-![](Write-ups/Wargames/OverTheWire/Screenshot2025-09-16at8.56.43PM.png)
+![](Screenshot2025-09-16at8.56.43PM.png)
 
 ---
 
@@ -61,8 +61,8 @@ Each time I decompressed the file, the result turned out to be compressed again 
     
 
 This process of renaming, identifying, and decompressing repeated multiple times.
-![](Write-ups/Wargames/OverTheWire/Screenshot2025-09-16at8.57.57PM.png)
-![](Write-ups/Wargames/OverTheWire/Screenshot2025-09-16at8.59.07PM.png)
+![](Screenshot2025-09-16at8.57.57PM.png)
+![](Screenshot2025-09-16at8.59.07PM.png)
 
 
 ---
@@ -74,7 +74,7 @@ Eventually, I extracted down to a file named `data8.bin`. Running `file data8.bi
 ```
 FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn
 ```
-![](Write-ups/Wargames/OverTheWire/Screenshot2025-09-16at8.59.39PM.png)
+![](Screenshot2025-09-16at8.59.39PM.png)
 
 ---
 
