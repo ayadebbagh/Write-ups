@@ -16,8 +16,8 @@ xxd -r hexdump.txt compressed.txt
 ```
 
 This reversed the hexdump into its binary form.
-![](💌Attachments/Screenshot%202025-09-16%20at%208.46.22%20PM.png)
-![](💌Attachments/Screenshot%202025-09-16%20at%208.46.22%20PM.png)
+![](💌Attachments/Screenshot%202025-09-16%20at%208.49.01%20PM.png)
+
 ---
 
 ### Step 2: Identifying the file type
@@ -62,7 +62,7 @@ Each time I decompressed the file, the result turned out to be compressed again 
 
 This process of renaming, identifying, and decompressing repeated multiple times.
 
-![[Screenshot 2025-09-16 at 7.58.57 PM.png]]
+![[💌Attachments/Screenshot 2025-09-16 at 7.58.57 PM.png]]
 ![[Screenshot 2025-09-16 at 8.00.33 PM.png]]
 ![[Screenshot 2025-09-16 at 8.02.24 PM.png]]
 
