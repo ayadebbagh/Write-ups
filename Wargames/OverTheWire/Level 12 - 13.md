@@ -79,4 +79,4 @@ FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn
 ---
 
 **Password for Level 13**:  
-`FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn`
+FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn
