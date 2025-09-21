@@ -41,4 +41,4 @@ pos_pw_list = ["f09e", "4dcf", "87ab", "dba8", "752e", "3961", "f159"]
 ```
 The code clearly tells us there are 7 different answers the password could be, when trying these, we get the flag
 
-Flag: ``
+Flag: `picoCTF{m45h_fl1ng1ng_cd6ed2eb}`
