@@ -1,7 +1,7 @@
 "The credentials for the next level can be retrieved by submitting the password of the current level to **a port on localhost in the range 31000 to 32000**. First find out which of these ports have a server listening on them. Then find out which of those speak SSL/TLS and which don’t. There is only 1 server that will give the next credentials, the others will simply send back to you whatever you send to it.
 **Helpful note: Getting “DONE”, “RENEGOTIATING” or “KEYUPDATE”? Read the “CONNECTED COMMANDS” section in the manpage.**"
 
-The first thing I did was use `ss -l` to show all listening port, however that showed way too many ports. After some research, I used `nmap` to only look for the specific range in the challenge by doing `nmap -p 31000-32000 127.0.0.1` where `127.0.0.1` is localhost. This gave me 5 different ports that I could test out. Doing `openssl s_client -connect localhost:<port>` on every given port to see if they accept ssl connections and if they give back the credentials. Tried on 3 ports before doing `openssl s_client -connect localhost:31790`. When giving the public key, I kept getting a `KEYUPDATE` message every time I put it in and then got a "wrong password" message. After looking up what `KEYUPDATE` indicated, I realized that since the password that I need to give starts with the letter "k", it triggered the `KEYUPDATE` and to counter that I needed to add ` -ign_eof` at the end of my command to it would take in the password I g
+The first thing I did was use `ss -l` to show all listening port, however that showed way too many ports. After some research, I used `nmap` to only look for the specific range in the challenge by doing `nmap -p 31000-32000 127.0.0.1` where `127.0.0.1` is localhost. This gave me 5 different ports that I could test out. Doing `openssl s_client -connect localhost:<port>` on every given port to see if they accept ssl connections and if they give back the credentials. Tried on 3 ports before doing `openssl s_client -connect localhost:31790`. When giving the password, I kept getting a `KEYUPDATE` message every time I put it in and then got a "wrong password" message. After looking up what `KEYUPDATE` indicated, I realized that since the password that I need to give starts with the letter "k", it triggered the `KEYUPDATE` and to counter that I needed to add ` -ign_eof` at the end of my command to it would take in the password I gave it. This worked and gave the following private rsa key
 
 **Credentials for level 17:**
 -----BEGIN RSA PRIVATE KEY-----
@@ -31,6 +31,10 @@ YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
 dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
 vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
 -----END RSA PRIVATE KEY-----
+
+To use this to connect to the next level, we need to create a file and save this key to it, we do that by creating a temp folder with `mktemp` and using the command `cat > sshkey17.private` with whatever you want to name the file. We can now use the file as a key to connect using `ssh -i sshkey17.private -p 2220 bandit17@bandit.labs.overthewire.org`. When doing this the first time, I got a `Permissions 0664 for 'sshkey17.private' are too open. It is required that your private key files are NOT accessible by others. This private key will be ignored. Load key "sshkey17.private": bad permissions` error. To fix this, we can change the permissions so they are only 
+
+To avoid having to do all this again to reconnect, we can get the password to the level with 
 
 **Password**: 
 EReVavePLFHtFlFsjn3hyzMlvSuSAcRD
