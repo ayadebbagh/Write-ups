@@ -128,9 +128,6 @@ cat /etc/bandit_pass/bandit17
 ```
 
 ---
-
-## Final result — Password for level 17
-
-```
+**Password for level 17:**
 EReVavePLFHtFlFsjn3hyzMlvSuSAcRD
-```
+
