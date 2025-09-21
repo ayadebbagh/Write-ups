@@ -26,4 +26,6 @@ def level_2_pw_check():
 
 level_2_pw_check()
 ```
-The `level_2_pw_check()` function tells us what the right password is, which is a concatenation of `chr(0x33) + chr(0x39) + chr(0x63) + chr(0x65)`. After researching what the `chr()` function does, we learn that it is a built-in function that takes an integer as an argument and returns a string representing the corresponding Unicode character. Using a unicode converter, we see that the equivalent of `chr(0x33) + chr(0x39) + chr(0x63) + chr(0x65)` is `39ce` which is the right password ta
+The `level_2_pw_check()` function tells us what the right password is, which is a concatenation of `chr(0x33) + chr(0x39) + chr(0x63) + chr(0x65)`. After researching what the `chr()` function does, we learn that it is a built-in function that takes an integer as an argument and returns a string representing the corresponding Unicode character. Using a unicode converter, we see that the equivalent of `chr(0x33) + chr(0x39) + chr(0x63) + chr(0x65)` is `39ce` which is the right password that gives us the flag.
+
+Flag: `picoCTF{tr45h_51ng1ng_502ec42e}`
