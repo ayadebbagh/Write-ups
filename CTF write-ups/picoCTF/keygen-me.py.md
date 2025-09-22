@@ -238,10 +238,11 @@ ui_flow()
 if jump_into_full:
     exec(full_version_code)
 ```
-We analyze what the code does, and we notice that the flag we are looking is is comprized of a static and dynamic part 
+We analyze what the code does, and we notice that the flag we are looking is is comprised of a static and dynamic part 
 ```
 key_part_static1_trial = "picoCTF{1n_7h3_|<3y_of_"
 key_part_dynamic1_trial = "xxxxxxxx"
 key_part_static2_trial = "}"
 key_full_template_trial = key_part_static1_trial + key_part_dynamic1_trial + key_part_static2_trial
 ```
+Looking further into the code, the `check_key`
