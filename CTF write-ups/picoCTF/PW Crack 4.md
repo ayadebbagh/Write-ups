@@ -42,4 +42,19 @@ level_4_pw_check()
 pos_pw_list = ["6288", "6152", "4c7a", "b722", "9a6e", "6717", "4389", "1a28", "37ac",...]
 ```
 We have 100 passwords, so we cannot try every single one of them. What we can do instead, is create a for loop that iterates over all the potential passwords, and tries each of them until it gets to the right one, which then immediately returns the flag.
-We mofidy `level4.py` as such
+We modify `def level_4_pw_check()` as such
+```
+def level_4_pw_check():
+    for i in range(0, len(pos_pw_list)):
+        user_pw = pos_pw_list[i]
+        user_pw_hash = hash_pw(user_pw)
+        if( user_pw_hash == correct_pw_hash ):
+            print("Welcome back... your flag, user:")
+            decryption = str_xor(flag_enc.decode(), user_pw)
+            print(decryption)
+            return
+    print("That password is incorrect")
+```
+
+Which gives us the flag:
+FLag: `picoCTF{fl45h_5pr1ng1ng_ae0fb77c}`
