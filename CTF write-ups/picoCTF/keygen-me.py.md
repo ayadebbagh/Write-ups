@@ -300,4 +300,5 @@ Looking further into the code, the `check_key` function seems to be of interest.
  ```
 
 Hashing "PRITCHARD" in SHA 256 gives us `496e54f222f256b023f33cdda0270853f39d7bf24fa1ca6b72d4b4fd1a9cae56` where the wanted characters are `54ef6292`. Combining the static and dynamic parts gives us the right flag and license key.
+
 Flag: `picoCTF{1n_7h3_|<3y_of_54ef6292}`
