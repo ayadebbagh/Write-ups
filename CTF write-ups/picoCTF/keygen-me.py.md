@@ -245,4 +245,13 @@ key_part_dynamic1_trial = "xxxxxxxx"
 key_part_static2_trial = "}"
 key_full_template_trial = key_part_static1_trial + key_part_dynamic1_trial + key_part_static2_trial
 ```
-Looking further into the code, the `check_key`
+Looking further into the code, the `check_key` function seems to be of interest. It tells exactly how the license key is checked and validated. We first start with checking the static part which is given to us
+```
+# Check static base key part --v
+        i = 0
+        for c in key_part_static1_trial:
+            if key[i] != c:
+                return False
+
+            i += 1
+```
