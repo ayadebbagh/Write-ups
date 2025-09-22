@@ -245,7 +245,7 @@ key_part_dynamic1_trial = "xxxxxxxx"
 key_part_static2_trial = "}"
 key_full_template_trial = key_part_static1_trial + key_part_dynamic1_trial + key_part_static2_trial
 ```
-Looking further into the code, the `check_key` function seems to be of interest. It tells exactly how the license key is checked and validated. We first start with checking the static part which is given to us
+Looking further into the code, the `check_key` function seems to be of interest. It tells exactly how the license key is checked and validated. We first start with checking the static part which is given to us as `picoCTF{1n_7h3_|<3y_of_`
 ```
 # Check static base key part --v
         i = 0
@@ -255,3 +255,48 @@ Looking further into the code, the `check_key` function seems to be of interest.
 
             i += 1
 ```
+ Moving on to the dynamic part, this looks like it is hashing `username_trial` and looking at index 4, 5, 3, 6, 2, 7, 1, and 8 of that hash as the dynamic pa
+ ```
+ # Check dynamic part --v
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[4]:
+             return False
+         else:
+             i += 1
+ 
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[5]:
+             return False
+         else:
+             i += 1
+ 
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[3]:
+             return False
+         else:
+             i += 1
+ 
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[6]:
+             return False
+         else:
+             i += 1
+ 
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[2]:
+             return False
+         else:
+             i += 1
+ 
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[7]:
+             return False
+         else:
+             i += 1
+ 
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[1]:
+             return False
+         else:
+             i += 1
+ 
+         if key[i] != hashlib.sha256(username_trial).hexdigest()[8]:
+             return False
+ 
+ 
+ 
+         return True
+ ```
