@@ -255,7 +255,7 @@ Looking further into the code, the `check_key` function seems to be of interest.
 
             i += 1
 ```
- Moving on to the dynamic part, this looks like it is hashing `username_trial` and looking at index 4, 5, 3, 6, 2, 7, 1, and 8 of that hash as the dynamic pa
+ Moving on to the dynamic part, this looks like it is hashing `username_trial` and looking at index 4, 5, 3, 6, 2, 7, 1, and 8 of that hash as the dynamic part.
  ```
  # Check dynamic part --v
          if key[i] != hashlib.sha256(username_trial).hexdigest()[4]:
@@ -296,7 +296,8 @@ Looking further into the code, the `check_key` function seems to be of interest.
          if key[i] != hashlib.sha256(username_trial).hexdigest()[8]:
              return False
  
- 
- 
          return True
  ```
+
+Hashing "PRITCHARD" in SHA 256 gives us `496e54f222f256b023f33cdda0270853f39d7bf24fa1ca6b72d4b4fd1a9cae56` where the wanted characters are `54ef6292`. Combining the static and dynamic parts gives us the right flag and license key.
+Flag: `picoCTF{1n_7h3_|<3y_of_54ef6292}`
