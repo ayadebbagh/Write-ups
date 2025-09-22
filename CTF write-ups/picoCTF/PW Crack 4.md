@@ -1,4 +1,7 @@
-![](Screenshot2025-09-22at10.40.31AM.png)
+**Challenge:**
+Can you crack the password to get the flag?Download the password checker [here](https://artifacts.picoctf.net/c/19/level4.py) and you'll need the encrypted [flag](https://artifacts.picoctf.net/c/19/level4.flag.txt.enc) and the [hash](https://artifacts.picoctf.net/c/19/level4.hash.bin) in the same directory too.There are 100 potential passwords with only 1 being correct. You can find these by examining the password checker script.
+
+---
 The `level4.py` file contains this:
 ```
 import hashlib

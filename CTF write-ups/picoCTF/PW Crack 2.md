@@ -1,6 +1,8 @@
-![](Screenshot2025-09-21at2.37.47PM.png)
-Starting with inspecting the code of the python file which has the following:
+**Challenge:**
+Can you crack the password to get the flag?Download the password checker [here](https://artifacts.picoctf.net/c/15/level2.py) and you'll need the encrypted [flag](https://artifacts.picoctf.net/c/15/level2.flag.txt.enc) in the same directory too.
 
+---
+Starting with inspecting the code of the python file which has the following:
 ```
 ### THIS FUNCTION WILL NOT HELP YOU FIND THE FLAG --LT ########################
 def str_xor(secret, key):

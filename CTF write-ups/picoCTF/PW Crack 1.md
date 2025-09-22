@@ -1,4 +1,7 @@
-![](Screenshot2025-09-21at2.33.51PM.png)
+**Challenge:**
+Can you crack the password to get the flag?Download the password checker [here](https://artifacts.picoctf.net/c/10/level1.py) and you'll need the encrypted [flag](https://artifacts.picoctf.net/c/10/level1.flag.txt.enc) in the same directory too.
+
+---
 The first thing I did was inspect the code of the password checker which gave the following
 ```
 ### THIS FUNCTION WILL NOT HELP YOU FIND THE FLAG --LT ########################

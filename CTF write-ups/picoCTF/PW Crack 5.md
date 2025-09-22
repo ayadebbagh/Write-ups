@@ -1,4 +1,7 @@
-![](Screenshot2025-09-22at11.01.11AM.png)
+**Challenge:**
+Can you crack the password to get the flag?Download the password checker [here](https://artifacts.picoctf.net/c/33/level5.py) and you'll need the encrypted [flag](https://artifacts.picoctf.net/c/33/level5.flag.txt.enc) and the [hash](https://artifacts.picoctf.net/c/33/level5.hash.bin) in the same directory too. Here's a [dictionary](https://artifacts.picoctf.net/c/33/dictionary.txt) with all possible passwords based on the password conventions we've seen so far.
+
+---
 The content of `level5.py` is the following
 ```
 import hashlib
