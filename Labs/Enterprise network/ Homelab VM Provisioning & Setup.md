@@ -1,19 +1,19 @@
-This document summarizes how each virtual machine in the Project-X homelab was provisioned, configured, domain-joined, hardened/loosened, and prepared for the cyber attack simulation.  
+This document summarizes how each virtual machine in the Project homelab was provisioned, configured, domain-joined, hardened/loosened, and prepared for the cyber attack simulation.  
 All VMs were deployed using VMware Workstation Pro (or VirtualBox equivalent) on a shared NAT network (`10.0.0.0/24`).
 
 ---
 
 ## Overall Homelab Topology
 
-|Host|OS|IP|Role|
-|---|---|---|---|
-|`project-x-dc`|Windows Server 2025|10.0.0.5|Domain Controller, DNS, DHCP|
-|`project-x-win-client`|Windows 11 Enterprise|10.0.0.100|Windows workstation|
-|`project-x-linux-client`|Ubuntu Desktop 22.04|10.0.0.101|Linux workstation|
-|`project-x-corp-svr`|Ubuntu Desktop 22.04|10.0.0.8|Corporate Jumpbox Server|
-|`project-x-sec-box`|Ubuntu Server 22.04|10.0.0.10|Security server (Wazuh/SO integration)|
-|`project-x-sec-work`|Security Onion|10.0.0.103|Network monitoring|
-|`project-x-attacker`|Kali Linux|DHCP|Offensive machine|
+| Host                   | OS                    | IP         | Role                                   |
+| ---------------------- | --------------------- | ---------- | -------------------------------------- |
+| `project-dc`           | Windows Server 2025   | 10.0.0.5   | Domain Controller, DNS, DHCP           |
+| `project-win-client`   | Windows 11 Enterprise | 10.0.0.100 | Windows workstation                    |
+| `project-linux-client` | Ubuntu Desktop 22.04  | 10.0.0.101 | Linux workstation                      |
+| `project-corp-svr`     | Ubuntu Desktop 22.04  | 10.0.0.8   | Corporate Jumpbox Server               |
+| `project-sec-box`      | Ubuntu Server 22.04   | 10.0.0.10  | Security server (Wazuh/SO integration) |
+| `project-sec-work`     | Security Onion        | 10.0.0.103 | Network monitoring                     |
+| `project-attacker`     | Kali Linux            | DHCP       | Offensive machine                      |
 
 Default gateway for all: **10.0.0.1**  
 DNS for all: **10.0.0.5** (the Domain Controller)
@@ -55,7 +55,7 @@ corp.project-dc.com
 Login with domain user:
 
 ```
-Username: johnd@corp.project-x-dc.com
+Username: johnd@corp.project-dc.com
 Password: @password123!
 ```
 
@@ -93,157 +93,130 @@ The corporate server acts as a jumpbox for internal services (dockerized apps, i
 
 ### **Steps**
 
-1. Clone `project-x-linux-client` VM.
+1. Clone `project-linux-client` VM.
 2. Change IP
     ```    IPv4 → 10.0.0.8    ```
 3. Change hostname:
   ```   sudo hostnamectl set-hostname corp-svr    ```
 4. Create admin user:
  ```bash
-    sudo adduser project-x-admin
-    sudo usermod -aG sudo project-x-admin
+    sudo adduser project-admin
+    sudo usermod -aG sudo project-admin
     ```
 
 5. Join Domain:
-    ```    sudo net ads join -U Administrator
-    ```
-    
+
+    `sudo net ads join -U Administrator`
+
 6. Install Docker Engine:
-    
-    ```bash
+  ```bash
     sudo apt-get update
     # Add Docker repo (per Docker docs)
     sudo apt-get install docker-ce docker-ce-cli containerd.io
     docker pull hello-world
     docker run hello-world
     ```
-    
-
-📸 Snapshot after Docker and AD join confirmed.
+Snapshot after Docker and AD join confirmed.
 
 ---
 
-# 🛡️ 4. Ubuntu Server (Clone) → Security Server (`project-x-sec-box`)
+## 4. Ubuntu Server (Clone) → Security Server (`project-sec-box`)
 
 Acts as dedicated security stack host (Wazuh agents, logs, SO integration).
-
 ### Steps
 
-1. Clone `project-x-linux-client`.
-    
+1. Clone `project-linux-client`.
 2. Change hostname:
-    
-    ```bash
+ ```bash
     sudo nano /etc/hostname
     sec-box
     ```
-    
 3. Create `sec-user`:
-    
-    ```bash
+   ```bash
     sudo adduser sec-user
     sudo usermod -aG sudo sec-user
     ```
-    
+
 4. Join Active Directory:
-    
-    ```bash
+
+  ```bash
     sudo net ads join -U Administrator
     ```
-    
-5. Create AD account `secuser@corp.project-x-dc.com`.
-    
+
+5. Create AD account `secuser@corp.project-dc.com`.
 
 ---
 
-# 🧅 5. Security Onion – Network Monitoring Workstation
+## 5. Security Onion – Network Monitoring Workstation
 
-Used for **Zeek**, **Suricata**, and **Elastic** dashboards.
+Used for Zeek, Suricata, and Elastic dashboards.
 
 ## Install Steps
 
 - Boot Security Onion ISO → choose:
-    
-    - **Install Security Onion Desktop**
-        
+    - Install Security Onion Desktop
 - Create user:
-    
+  ```
+    project-sec-work / @password123!
     ```
-    project-x-sec-work / @password123!
-    ```
-    
+
 - Assign static IP:
-    
-    ```
+  ```
     10.0.0.103/24
     Gateway: 10.0.0.1
     DNS: 10.0.0.5
     ```
-    
+
 - Add DNS search domain:
-    
+  ```
+    corp.project-dc.com
     ```
-    corp.project-x-dc.com
-    ```
-    
+
 - Reboot:
-    
-    ```bash
+  ```bash
     reboot
     ```
-    
+
 - Set root password:
-    
-    ```bash
+  ```bash
     sudo passwd root
     ```
-    
 
-📸 Snapshot taken.
+Snapshot taken.
 
 ---
 
-# 🔥 6. Kali Linux – Attacker Machine
+## 6. Kali Linux: Attacker Machine
 
 Primary offensive operations machine for phishing, brute force, reverse shells, lateral movement.
 
 ## Setup steps
 
 - Start installer → “Graphical Install”.
-    
 - Create user:
-    
-    ```
+  ```
     attacker / attacker
     ```
-    
+
 - Guided partition → use entire disk.
-    
 - Enable SSH:
-    
-    ```bash
+ ```bash
     sudo systemctl start ssh
     ```
-    
 - Optional: disable auto-logoff (XFCE Power Manager).
-    
-
-📸 Snapshot taken.
+Snapshot taken.
 
 ---
 
-# 🧱 7. Windows Server 2025 – Domain Controller (`project-x-dc`)
+## 7. Windows Server 2025: Domain Controller (`project-dc`)
 
 Central authentication, DHCP, DNS.
-
-## Installation
+### Installation
 
 - Boot ISO → "Desktop Experience"
-    
 - Create partitions → install.
-    
 - Set Administrator password:
-    
+
     ```
     @Deeboodah1!
     ```
@@ -273,7 +246,7 @@ Configure AD DS:
 - New forest:
     
     ```
-    corp.project-x-dc.com
+    corp.project-dc.com
     ```
     
 - DSRM password = @Deeboodah1!
