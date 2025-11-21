@@ -4,11 +4,11 @@ After installing VMware Workstation, we configured the default **VMNet8 NAT netw
 
 **Steps:**
 
-1. Open VMware Workstation and navigate to **Edit → Virtual Network Editor**.
-2. Click **Change Settings** to enable editing.
-3. Select **VMNet8** and update the **Subnet IP** to `10.0.0.0`.
-4. Open **DHCP Settings** and configure the appropriate address range for the VMs.
-5. Click **Apply** and then **OK** to save the changes.
+1. Open VMware Workstation and navigate to Edit → Virtual Network Editor.
+2. Click Change Settings to enable editing.
+3. Select VMNet8 and update the Subnet IP to `10.0.0.0`.
+4. Open DHCP Settings and configure the appropriate address range for the VMs.
+5. Click Apply and then OK to save the changes.
 
 This setup ensures all virtual machines are on the same private network while retaining Internet connectivity through NAT.
 
@@ -22,12 +22,12 @@ ISO files for the project can be obtained from the ISO provider. Note that downl
 
 ### Creating a Virtual Machine
 
-1. In VMware Workstation, select **Create a New Virtual Machine**.
+1. In VMware Workstation, select Create a New Virtual Machine.
 2. Keep the default settings when prompted.
 3. Browse and select the relevant `.iso` file for installation (refer to the Project Overview for file sources).
 4. Assign a name to the virtual machine.
-5. Set a **TPM password** if required, and ensure it is securely saved.
-6. Leave the disk option as **Split virtual disk into multiple files**.
+5. Set a TPM password if required, and ensure it is securely saved.
+6. Leave the disk option as Split virtual disk into multiple files.
 
 ---
 
@@ -35,7 +35,7 @@ ISO files for the project can be obtained from the ISO provider. Note that downl
 
 To preserve the VM’s initial state:
 
-- Right-click the virtual machine → **Snapshot → Take Snapshot**.
+- Right-click the virtual machine → Snapshot → Take Snapshot.
 
 Snapshots allow easy rollback if changes cause issues during the project.
 

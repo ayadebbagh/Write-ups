@@ -15,8 +15,8 @@ All VMs were deployed using VMware Workstation Pro (or VirtualBox equivalent) on
 | `project-sec-work`     | Security Onion        | 10.0.0.103 | Network monitoring                     |
 | `project-attacker`     | Kali Linux            | DHCP       | Offensive machine                      |
 
-Default gateway for all: **10.0.0.1**  
-DNS for all: **10.0.0.5** (the Domain Controller)
+Default gateway for all: 10.0.0.1
+DNS for all: 10.0.0.5 (the Domain Controller)
 
 ---
 
@@ -28,7 +28,7 @@ This VM acts as the general employee workstation.
 - Boot from Windows 11 Enterprise ISO.
 - Create partition on Disk 0 → select largest partition → Install.
 - During OOBE, bypass Microsoft Account:
-    - Switch NIC to _Host-Only_ to cut Internet.
+    - Switch NIC to Host-Only to cut Internet.
     - Press Shift + F10
     - Run:
         ``` oobe\bypassnro  ```    
@@ -216,13 +216,10 @@ Central authentication, DHCP, DNS.
 - Boot ISO → "Desktop Experience"
 - Create partitions → install.
 - Set Administrator password:
-
-    ```
+  ```
     @Deeboodah1!
     ```
-    
-
-## Static IP
+### Static IP
 
 ```
 10.0.0.5  
@@ -230,29 +227,20 @@ Central authentication, DHCP, DNS.
 10.0.0.1  
 ```
 
-## Promote to Domain Controller
+### Promote to Domain Controller
 
 Server Manager → Add Roles and Features:
-
 - AD Domain Services
-    
 - DNS Server
-    
 - DHCP Server
-    
 
 Configure AD DS:
-
 - New forest:
-    
-    ```
+  ```
     corp.project-dc.com
     ```
-    
 - DSRM password = @Deeboodah1!
-    
-
-## Configure DNS Forwarder
+### Configure DNS Forwarder
 
 DNS Manager → Forwarders → Add:
 
@@ -260,7 +248,7 @@ DNS Manager → Forwarders → Add:
 8.8.8.8
 ```
 
-## DHCP Scope (10.0.0.100–10.0.0.200)
+### DHCP Scope (10.0.0.100–10.0.0.200)
 
 Router IP:
 
@@ -268,20 +256,17 @@ Router IP:
 10.0.0.1
 ```
 
-## Add Domain Users
+### Add Domain Users
 
 - John Doe (for Windows workstation)
-    
 - Jane Doe (Linux workstation)
-    
 - Admin/service accounts as needed
-    
 
-📸 Snapshot taken.
+Snapshot taken.
 
 ---
 
-# 🖥️ 8. Corporate Server – Docker Component Setup
+## 8 . Corporate Server – Docker Component Setup
 
 After provisioning:
 
@@ -294,38 +279,14 @@ Ensures containerization ready for FTP, DNS, Email (MailHog), etc.
 
 ---
 
-# ✔️ Final Summary
+## Final Summary
 
 After provisioning, the homelab consists of:
 
 - A fully functional Windows domain
-    
 - Both Windows & Linux domain-joined workstations
-    
 - A corporate jumpbox server running Dockerized internal services
-    
 - A security monitoring server + Security Onion
-    
 - A dedicated attacker machine
-    
 - Proper network segmentation and static addressing
-    
 - Snapshots taken at each milestone
-    
-
-This environment now supports the _Configure Vulnerable Environment_ and _Cyber Attack Simulation_ stages.
-
----
-
-If you want, I can turn this into multiple separate GitHub markdown files with:
-
-- screenshot placeholders
-    
-- navigation links
-    
-- table of contents
-    
-- better formatting (like “Setup Windows 11.md”, “Setup Kali.md”, etc.)
-    
-
-Just say **“yes split them into files”**.
