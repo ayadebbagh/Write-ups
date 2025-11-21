@@ -115,40 +115,27 @@ You can monitor logs via:
 Configure Wazuh to alert when >3 SSH failures occur.
 ### Create Monitor
 
-**Explore → Alerting → Monitors → Create Monitor**
-
-- Name: **3 Failed SSH Attempts**
-    
+Explore → Alerting → Monitors → Create Monitor
+- Name: 3 Failed SSH Attempts
 - Index: `wazuh-alerts-4.x-*`
-    
 - Time Field: `@timestamp`
-    
-
 ### Data Filters
-
 Add filters:
-
 - `data.wazuh.rule.groups: authentication_failed`
-    
 - `process.name: sshd`
-    
-
 ### Trigger
 
-- Severity: **3 (Medium)**
-    
-- Condition: **count > 2**
-    
+- Severity: 3 (Medium)
+- Condition: count > 2
 
 This produces alerts for brute-force attempts.
 
 ---
 
-# 4. SMTP Inbox Simulation (MailHog)
+## 4. SMTP Inbox Simulation (MailHog)
 
 Purpose: simulate phishing, credential capture, and internal email flow.
-
-### On `project-x-corp-svr`
+### On `project-corp-svr`
 
 Start MailHog:
 
@@ -157,7 +144,7 @@ cd /home/mailhog
 sudo docker compose up -d
 ```
 
-### On `project-x-linux-client`
+### On `project-linux-client`
 
 Run email polling script:
 
@@ -172,12 +159,12 @@ Stop script:
 pkill -f email_poller
 ```
 
-**Detection Insight:**  
+Detection Insight:  
 Again, `project-x-corp-svr` has no agent → email activity is invisible.
 
 ---
 
-# 5. Enable WinRM on `project-x-win-client`
+## 5. Enable WinRM on `project-win-client`
 
 WinRM enables remote execution, necessary for tools like Evil-WinRM.
 
@@ -194,50 +181,35 @@ Restart-Service WinRM
 
 ---
 
-## 🚨 Wazuh Detection – WinRM
+## Wazuh Detection – WinRM
 
 Windows events for WinRM authentication:
-
-- **4624** – successful
-    
-- **4625** – failed
-    
+- 4624 – successful
+- 4625 – failed
 
 Wazuh rule for logon success:
-
-- **Rule ID:** 60106
-    
-- **Look for:** `data.win.eventdata.logonProcessName: Kerberos`
-    
+- Rule ID: 60106
+- Look for: `data.win.eventdata.logonProcessName: Kerberos`
 
 ---
 
-# 6. Create Detection Alert – WinRM Logon
+## 6. Create Detection Alert – WinRM Logon
 
 Same process as SSH monitor:
-
-- Name: **WinRM Logon**
-    
+- Name: WinRM Logon
 - Index: `wazuh-alerts-4.x-*`
-    
 
 Filters:
-
 - `win.system.eventID: 4624`
-    
 - `win.eventdata.logonProcessName: Kerberos`
-    
 
 Trigger:
-
 - Severity 3
-    
 - Condition: `>1` events
-    
 
 ---
 
-# 7. Enable RDP on `project-x-dc`
+## 7. Enable RDP on `project-x-dc`
 
 Windows settings:
 
@@ -247,23 +219,17 @@ Settings → System → Remote Desktop → Enable
 
 ---
 
-## 🚨 Wazuh Detection – RDP
+## Wazuh Detection – RDP
 
-- Event ID: **4624**
-    
-- Process: **User32** (RDP logon)
-    
+- Event ID: 4624
+- Process: User32 (RDP logon)
 
 Wazuh Rule:
-
-- **Rule ID:** 92653
-    
+- Rule ID: 92653
 - Description: Administrator logged in via RDP
-    
 
 ---
-
-# 8. Create a Sensitive File on the Domain Controller
+## 8. Create a Sensitive File on the Domain Controller
 
 Path:  
 `C:\Users\Administrator\Documents\ProductionFiles\secrets.txt`
@@ -275,12 +241,11 @@ DEE BOO DAH
 ```
 
 ---
-
-## 🚨 Enable File Integrity Monitoring (FIM)
+## Enable File Integrity Monitoring (FIM)
 
 In Wazuh:
 
-**Server Management → Endpoint Groups → Windows → Files (agent.conf)**
+Server Management → Endpoint Groups → Windows → Files (agent.conf)
 
 Add:
 
@@ -296,8 +261,7 @@ Add:
 FIM now logs edits/deletes/changes to `secrets.txt`.
 
 ---
-
-# 9. Custom Detection Rule – Sensitive File Access
+## 9. Custom Detection Rule – Sensitive File Access
 
 Modify `local_rules.xml`:
 
@@ -314,27 +278,18 @@ Modify `local_rules.xml`:
 Restart Wazuh.
 
 ---
+## 10. Create Monitor – Sensitive File Access
 
-# 10. Create Monitor – Sensitive File Access
-
-- Name: **File Accessed**
-    
+- Name: File Accessed
 - Filters:
-    
     - `full_log: secrets.txt`
-        
     - `syscheck.event: modified`
-        
 - Trigger:
-    
-    - Severity **2 (High)**
-        
+    - Severity 2 (High)
     - Condition: `>1`
-        
 
 ---
-
-# 11. Exfiltration to `project-x-attacker`
+## 11. Exfiltration to `project-x-attacker`
 
 Goal: simulate data exfiltration via SSH/SCP.
 
@@ -356,12 +311,11 @@ touch /home/attacker/my_exfil.txt
 
 Use SCP (or PowerShell equivalents) to copy `secrets.txt` → Kali.
 
-**Detection:**  
+Detection:  
 FIM + custom rule should alert on file access.
 
 ---
-
-# 12. Enable Insecure Guest Logons (SMB)
+## 12. Enable Insecure Guest Logons (SMB)
 
 This simulates outdated enterprise environments.
 
@@ -382,48 +336,18 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstatio
 -Name AllowInsecureGuestAuth -Value 1 -Force
 ```
 
----
-
-# 📸 Snapshot
-
-Take snapshots of all VMs labelled:
-
-**“Vulnerable Environment Setup”**
 
 ---
 
-# ✅ Summary
+## Summary
 
 By the end of this guide, the environment now contains intentional weaknesses:
-
 - SSH with password & root login enabled
-    
 - WinRM & RDP exposed
-    
 - Misconfigured SMB guest access
-    
 - Sensitive file monitored via Wazuh FIM
-    
 - No agent on corporate server (visibility gap)
-    
 - MailHog simulating phishing environment
-    
 - Full detection alerts built (SSH, WinRM, file access)
-    
 
-This setup prepares the environment for the **Cyber Attack Simulation** phase of the homelab.
-
----
-
-If you want, I can convert this into **multiple GitHub-ready Markdown files**, complete with:
-
-- Code blocks
-    
-- Screenshot placeholders
-    
-- Section numbering
-    
-- Navigation headers
-    
-
-Just tell me!
+This setup prepares the environment for the Cyber Attack Simulation phase of the homelab.
