@@ -3,45 +3,33 @@ This document describes the setup of a containerized email server using MailHog 
 MailHog is used to simulate enterprise email delivery for:
 - Phishing attack scenarios
 - Email exfiltration testing
-    
 - Debugging scripts that send emails
-    
 - Observing SMTP traffic inside Wazuh/SIEM
-    
 
 It runs on Docker inside the corporate jumpbox:
-
 `project-x-corp-svr` (Ubuntu Desktop 22.04).
 
 MailHog provides:
-
 - SMTP server on port 1025
-    
 - Web inbox on port 8025
-    
 - REST API for automation
-    
 
 ## Setup MailHog Using Docker Compose
 
 On `project-x-corp-svr`:
-
 1. Create directory:
-    
-    ```
+   ```
     cd /home
     sudo mkdir mailhog && cd mailhog
     ```
-    
-1. Create docker-compose. Yml:
-    
-    ```
+
+2. Create docker-compose. Yml:
+   ```
     sudo nano docker-compose.yml
     ```
-    
-2. Add:
-    
-    ```
+
+3. Add:
+   ```
     version: "3"
     services:
       mailhog:
@@ -51,36 +39,28 @@ On `project-x-corp-svr`:
           - "1025:1025"
           - "8025:8025"
     ```
-    
-3. Start service:
-    
-    ```
+
+4. Start service:
+   ```
     sudo docker compose up -d
     ```
-    
-4. Access MailHog UI:
-    
-    ```
+
+5. Access MailHog UI:
+   ```
     http://localhost:8025
     ```
-    
     Or
-    
-    ```
+   ```
     http://10.0.0.8:8025
     ```
-    
 
 ## Sending Test Email via Python
-
 Create script:
-
 ```
 sudo nano test_message.py
 ```
 
 Paste:
-
 ```
 import smtplib
 from email.message import EmailMessage
@@ -96,33 +76,27 @@ with smtplib.SMTP("localhost", 1025) as server:
 ```
 
 Run:
-
 ```
 sudo chmod +x test_message.py
 sudo python3 test_message.py
 ```
 
 Email appears in MailHog UI.
-
 ## Email Poller Script (Linux Workstation)
 
-Used on `project-x-linux-client` to simulate real-time inbox checking.
+Used on `project-linux-client` to simulate real-time inbox checking.
 
 1. Install dependencies:
-    
-    ```
+   ```
     sudo apt install curl jq
     ```
-    
+
 2. Create poller:
-    
-    ```
+   ```
     sudo nano email_poller.sh
     ```
-    
-3. Paste:
-    
 
+3. Paste:
 ```
 #!/bin/bash
 
@@ -158,32 +132,14 @@ done
 ```
 
 4. Make executable and run:
-    
-    ```
+   ```
     chmod +x email_poller.sh
     sudo ./email_poller.sh &
     ```
-    
 
 Stop:
-
 ```
 pkill -f email_poller
 ```
 
 The email server is now fully operational and ready for phishing simulation, attack detection, and SIEM correlation in later modules.
-
----
-
-If you want, I can:
-
-- Rewrite these into more high-level summaries
-    
-- Produce README-ready versions
-    
-- Split each into separate folders in a GitHub structure
-    
-- Generate architecture diagrams for each component
-    
-
-Just tell me what style you want your GitHub repo to follow.
