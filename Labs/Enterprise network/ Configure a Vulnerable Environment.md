@@ -160,7 +160,7 @@ pkill -f email_poller
 ```
 
 Detection Insight:  
-Again, `project-x-corp-svr` has no agent → email activity is invisible.
+Again, `project-corp-svr` has no agent → email activity is invisible.
 
 ---
 
@@ -209,7 +209,7 @@ Trigger:
 
 ---
 
-## 7. Enable RDP on `project-x-dc`
+## 7. Enable RDP on `project-dc`
 
 Windows settings:
 
@@ -289,7 +289,7 @@ Restart Wazuh.
     - Condition: `>1`
 
 ---
-## 11. Exfiltration to `project-x-attacker`
+## 11. Exfiltration to `project-attacker`
 
 Goal: simulate data exfiltration via SSH/SCP.
 

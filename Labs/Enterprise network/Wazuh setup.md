@@ -87,7 +87,7 @@ Run on Linux:
 
 ```
 sudo wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.9.2-1_amd64.deb
-sudo WAZUH_MANAGER='10.0.0.10' WAZUH_AGENT_GROUP='default' WAZUH_AGENT_NAME='project-x-linux-client' dpkg -i ./wazuh-agent_4.9.2-1_amd64.deb
+sudo WAZUH_MANAGER='10.0.0.10' WAZUH_AGENT_GROUP='default' WAZUH_AGENT_NAME='project-linux-client' dpkg -i ./wazuh-agent_4.9.2-1_amd64.deb
 ```
 
 Enable + start:

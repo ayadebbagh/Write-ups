@@ -7,7 +7,7 @@ MailHog is used to simulate enterprise email delivery for:
 - Observing SMTP traffic inside Wazuh/SIEM
 
 It runs on Docker inside the corporate jumpbox:
-`project-x-corp-svr` (Ubuntu Desktop 22.04).
+`project-corp-svr` (Ubuntu Desktop 22.04).
 
 MailHog provides:
 - SMTP server on port 1025
@@ -16,7 +16,7 @@ MailHog provides:
 
 ## Setup MailHog Using Docker Compose
 
-On `project-x-corp-svr`:
+On `project-corp-svr`:
 1. Create directory:
    ```
     cd /home

